@@ -179,6 +179,13 @@ class SliderComponent {
 
     _dragEndHandler() {
         this.isDragging = false;
+
+        // for (let i = 0; i < this.ui.slides.length; i++) {
+        //     let translate = window.getComputedStyle(this.ui.slides[i]).transform;
+            
+        //     let values = translate.match(/-?\d+\.?\d*/g); //RETURN ARRAY OF MATRIX PROPERTIES --> [ scaleX, skewY, skewX, scaleY, translateX, translateY ]
+        //     TweenLite.to(this.ui.slides[i], 1, { x: values[4], ease: Power3.easeOut});
+        // }
     }
 
     _tickHandler() {
