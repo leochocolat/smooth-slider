@@ -24,13 +24,14 @@ class SliderComponent {
             slideImages: this.el.querySelectorAll('.js-slide-image'),
         }
 
-        this._settings = { velocity: 55, lerp: 0.07 }
+        this._settings = { velocity: 55, lerp: 0.07, anim: 'anim-1' }
         this._dragX = 0;
         this._sliderPosition = 0;
 
         let gui = new dat.GUI();
         gui.add(this._settings, 'velocity', 0.001, 100).step(0.001);
         gui.add(this._settings, 'lerp', 0.001, 0.2).step(0.001);
+        gui.add(this._settings, 'anim', [ 'anim-1', 'anim-2', 'anim-3']);
 
         this._setup();
     }
@@ -148,13 +149,32 @@ class SliderComponent {
     }
 
     _pressHandler() {
-        TweenLite.to(this.ui.slideImages, .6, { scale: 1.02, ease: Power2.easeOut })
-        // TweenLite.to(this.ui.slides, .6, { scale: 1.02, ease: Power2.easeOut })
+        if (this._settings.anim == 'anim-1') {
+            TweenLite.to(this.ui.slideImages, .6, { scale: 1.02, ease: Power2.easeOut })
+        }
+        if (this._settings.anim == 'anim-2') {
+            TweenLite.to(this.ui.slideImages, .6, { scale: 1.02, ease: Power2.easeOut })
+            TweenLite.to(this.ui.slides, .6, { scale: 1.02, ease: Power2.easeOut })
+        } 
+        if (this._settings.anim == 'anim-3') {
+            TweenLite.to(this.ui.slideImages, .6, { scale: 1.08, ease: Power2.easeOut })
+            TweenLite.to(this.ui.slides, .6, { scale: 0.98, ease: Power2.easeOut })
+        }
+
     }
 
     _pressUpHandler() {
-        TweenLite.to(this.ui.slideImages, .6, { scale: 1, ease: Power2.easeOut })
-        // TweenLite.to(this.ui.slides, .6, { scale: 1, ease: Power2.easeOut })
+        if (this._settings.anim == 'anim-1') {
+            TweenLite.to(this.ui.slideImages, .6, { scale: 1, ease: Power2.easeOut })
+        }
+        if (this._settings.anim == 'anim-2') {
+            TweenLite.to(this.ui.slideImages, .6, { scale: 1, ease: Power2.easeOut })
+            TweenLite.to(this.ui.slides, .6, { scale: 1, ease: Power2.easeOut })
+        }
+        if (this._settings.anim == 'anim-3') {
+            TweenLite.to(this.ui.slideImages, .6, { scale: 1, ease: Power2.easeOut })
+            TweenLite.to(this.ui.slides, .6, { scale: 1, ease: Power2.easeOut })
+        }
     }
 
     _dragEndHandler() {
