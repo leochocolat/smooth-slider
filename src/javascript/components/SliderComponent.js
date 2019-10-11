@@ -24,19 +24,26 @@ class SliderComponent {
             slideImages: this.el.querySelectorAll('.js-slide-image'),
         }
 
-        this._settings = { velocity: 40 }
+        this._settings = { velocity: 55, lerp: 0.07 }
         this._dragX = 0;
         this._sliderPosition = 0;
 
         let gui = new dat.GUI();
         gui.add(this._settings, 'velocity', 0.001, 100).step(0.001);
+        gui.add(this._settings, 'lerp', 0.001, 0.2).step(0.001);
 
         this._setup();
     }
 
     _setup() {
+        this._getSlideAmount();
+        this._resize();
         this._setupHammer();
         this._setupEventListener();
+    }
+
+    _getSlideAmount() {
+        this._slideAmount = this.ui.slides.length;
     }
 
     _setupHammer() {
@@ -48,23 +55,59 @@ class SliderComponent {
     }
 
     _updatePosition() {
+        // if (this._firstChildOffsetX >= 0 && this._dragX > 0) return;
+
         this._sliderPosition = Lerp(this._sliderPosition, this._sliderPosition + this._dragX * this._settings.velocity, 0.5);
         TweenLite.set(this.ui.slides, { x: this._sliderPosition });
     }
-
+    
     _resetDragX() {
         if (this.isDragging) return;
+        
+        this._dragX = Lerp(this._dragX, 0, this._settings.lerp);
+    }
+    
+    _resetPosition() {
+        if (this._firstChildOffsetX < 400) return; 
+    }
 
-        this._dragX = Lerp(this._dragX, 0, 0.1);
+    _watchPosition() {
+        let firstChild = this.ui.slides[0];
+        let lastChild = this.ui.slides[this.ui.slides.length - 1];
+
+        this._firstChildOffsetX = firstChild.getBoundingClientRect().x;
+        this._lastChildOffsetX = lastChild.getBoundingClientRect().x;
+    }
+
+    _isLastChildInView() {
+        if (this._lastChildOffsetX <= this._width + 100) {
+            this._createSlide();
+            this._updateUI();
+        }
+    }
+
+    _createSlide() {
+        let lastSlide = this.ui.slides[this._mod(this.ui.slides.length, this._slideAmount)];
+        let clone = lastSlide.cloneNode(true);
+
+        this.el.appendChild(clone);
+    }
+
+    _updateUI() {
+        this.ui.slides = this.el.querySelectorAll('.js-slide');
     }
 
     _resize() {
-        
+        this._width = window.innerWidth;
+        this._height = window.innerWidth;
     }
 
     _tick() {
         this._updatePosition();
         this._resetDragX();
+        this._watchPosition();
+        this._isLastChildInView();
+        this._resetPosition();
     }
 
     _setupEventListener() {
@@ -102,6 +145,10 @@ class SliderComponent {
 
     _resizeHandler() {
         this._resize();
+    }
+
+    _mod(n, m) {
+        return ((n % m) + m) % m;
     }
 
 }
