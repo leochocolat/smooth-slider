@@ -1,4 +1,3 @@
-//IMPORTS
-import Title from './components/Title.js';
+import SliderComponent from './components/SliderComponent';
 
-Title.createTitle("Boilerplate by Léo Mouraire Hee");
+new SliderComponent(document.querySelector('.js-slider-component'));

@@ -1,0 +1,38 @@
+img {
+    user-select: none;
+    pointer-events: none;
+}
+
+.section-slider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    height: 100vh;
+    max-width: 1400px;
+    width: 100%;
+
+    margin: auto;
+}
+
+.slider-container {
+    white-space: nowrap;
+}
+
+.slide {
+    display: inline-block;
+
+    margin-right: 80px;
+    font-size: 0px;
+
+    overflow: hidden;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-1000px);
+    }
+}
