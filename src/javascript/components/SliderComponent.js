@@ -37,6 +37,7 @@ class SliderComponent {
 
     _setup() {
         this._getSlideAmount();
+        this._getComputedStyle();
         this._resize();
         this._setupHammer();
         this._setupEventListener();
@@ -44,6 +45,10 @@ class SliderComponent {
 
     _getSlideAmount() {
         this._slideAmount = this.ui.slides.length;
+    }
+
+    _getComputedStyle() {
+        this._padding = this.ui.slides[0].getBoundingClientRect().x;
     }
 
     _setupHammer() {
@@ -55,8 +60,6 @@ class SliderComponent {
     }
 
     _updatePosition() {
-        // if (this._firstChildOffsetX >= 0 && this._dragX > 0) return;
-
         this._sliderPosition = Lerp(this._sliderPosition, this._sliderPosition + this._dragX * this._settings.velocity, 0.5);
         TweenLite.set(this.ui.slides, { x: this._sliderPosition });
     }
@@ -86,6 +89,19 @@ class SliderComponent {
         }
     }
 
+    _slidesOutView() {
+        for (let i = 0; i < this.ui.slides.length; i++) {
+            if (this.ui.slides[i].getBoundingClientRect().x > this._width + 100 || 
+            this.ui.slides[i].getBoundingClientRect().x + this.ui.slides[i].getBoundingClientRect().width + 100 < -100 ) 
+            {
+                
+            } else 
+            {
+                
+            }
+        }
+    }
+
     _createSlide() {
         let lastSlide = this.ui.slides[this._mod(this.ui.slides.length, this._slideAmount)];
         let clone = lastSlide.cloneNode(true);
@@ -95,6 +111,7 @@ class SliderComponent {
 
     _updateUI() {
         this.ui.slides = this.el.querySelectorAll('.js-slide');
+        this.ui.slideImages = this.el.querySelectorAll('.js-slide-image');
     }
 
     _resize() {
@@ -103,10 +120,15 @@ class SliderComponent {
     }
 
     _tick() {
+        this._watchPosition();
+
+        
         this._updatePosition();
         this._resetDragX();
-        this._watchPosition();
+        
+        this._slidesOutView();
         this._isLastChildInView();
+
         this._resetPosition();
     }
 
@@ -127,12 +149,12 @@ class SliderComponent {
 
     _pressHandler() {
         TweenLite.to(this.ui.slideImages, .6, { scale: 1.02, ease: Power2.easeOut })
-        TweenLite.to(this.ui.slides, .6, { scale: 1.02, ease: Power2.easeOut })
+        // TweenLite.to(this.ui.slides, .6, { scale: 1.02, ease: Power2.easeOut })
     }
 
     _pressUpHandler() {
         TweenLite.to(this.ui.slideImages, .6, { scale: 1, ease: Power2.easeOut })
-        TweenLite.to(this.ui.slides, .6, { scale: 1, ease: Power2.easeOut })
+        // TweenLite.to(this.ui.slides, .6, { scale: 1, ease: Power2.easeOut })
     }
 
     _dragEndHandler() {
