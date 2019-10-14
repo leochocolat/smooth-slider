@@ -24,7 +24,7 @@ class SliderComponent {
             slideImages: this.el.querySelectorAll('.js-slide-image'),
         }
 
-        this._settings = { velocity: 55, lerp: 0.07, anim: 'anim-1' }
+        this._settings = { velocity: 55, lerp: 0.07, anim: 'anim-1', resetVelocity: -1, resetLerp: 0.1 }
         this._dragX = 0;
         this._sliderPosition = 0;
 
@@ -32,6 +32,8 @@ class SliderComponent {
         gui.add(this._settings, 'velocity', 0.001, 100).step(0.001);
         gui.add(this._settings, 'lerp', 0.001, 0.2).step(0.001);
         gui.add(this._settings, 'anim', [ 'anim-1', 'anim-2', 'anim-3']);
+        gui.add(this._settings, 'resetVelocity', -10, -0.1).step(0.1);
+        gui.add(this._settings, 'resetLerp', 0.001, 0.2).step(0.001);
 
         this._setup();
     }
@@ -72,7 +74,11 @@ class SliderComponent {
     }
     
     _resetPosition() {
-        if (this._firstChildOffsetX < 400) return; 
+        console.log(this._padding);
+        if (this._firstChildOffsetX <= this._padding) return;
+        
+        this._dragX = Lerp(this._dragX, this._settings.resetVelocity, this._settings.resetLerp);
+
     }
 
     _watchPosition() {
@@ -179,13 +185,6 @@ class SliderComponent {
 
     _dragEndHandler() {
         this.isDragging = false;
-
-        // for (let i = 0; i < this.ui.slides.length; i++) {
-        //     let translate = window.getComputedStyle(this.ui.slides[i]).transform;
-            
-        //     let values = translate.match(/-?\d+\.?\d*/g); //RETURN ARRAY OF MATRIX PROPERTIES --> [ scaleX, skewY, skewX, scaleY, translateX, translateY ]
-        //     TweenLite.to(this.ui.slides[i], 1, { x: values[4], ease: Power3.easeOut});
-        // }
     }
 
     _tickHandler() {
