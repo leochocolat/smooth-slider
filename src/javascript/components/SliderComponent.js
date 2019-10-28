@@ -24,7 +24,7 @@ class SliderComponent {
             slideImages: this.el.querySelectorAll('.js-slide-image'),
         }
 
-        this._settings = { velocity: 55, lerp: 0.07, anim: 'anim-3', resetVelocity: -1, resetLerp: 0.1 }
+        this._settings = { velocity: 40, lerp: 0.07, anim: 'anim-3', resetVelocity: -1.5, resetLerp: .2 }
         this._dragX = 0;
         this._sliderPosition = 0;
 
@@ -63,19 +63,18 @@ class SliderComponent {
     }
 
     _updatePosition() {
+        if (this._blockDrag) return;
         this._sliderPosition = Lerp(this._sliderPosition, this._sliderPosition + this._dragX * this._settings.velocity, 0.5);
         TweenLite.set(this.ui.slides, { x: this._sliderPosition });
     }
     
     _resetDragX() {
         if (this.isDragging) return;
-        
         this._dragX = Lerp(this._dragX, 0, this._settings.lerp);
     }
     
-    _resetPosition() {
+    _watchDrag() {
         if (this._firstChildOffsetX <= this._padding) return;
-        
         this._dragX = Lerp(this._dragX, this._settings.resetVelocity, this._settings.resetLerp);
     }
 
@@ -121,19 +120,20 @@ class SliderComponent {
     _resize() {
         this._width = window.innerWidth;
         this._height = window.innerWidth;
+
+        this._getComputedStyle();
     }
 
     _tick() {
         this._watchPosition();
 
-        
         this._updatePosition();
         this._resetDragX();
         
         this._slidesOutView();
         this._isLastChildInView();
 
-        this._resetPosition();
+        this._watchDrag();
     }
 
     _setupEventListener() {
@@ -163,7 +163,6 @@ class SliderComponent {
             TweenLite.to(this.ui.slideImages, .6, { scale: 1.08, ease: Power2.easeOut })
             TweenLite.to(this.ui.slides, .6, { scale: 0.98, ease: Power2.easeOut })
         }
-
     }
 
     _pressUpHandler() {
