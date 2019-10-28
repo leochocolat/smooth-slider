@@ -24,7 +24,7 @@ class SliderComponent {
             slideImages: this.el.querySelectorAll('.js-slide-image'),
         }
 
-        this._settings = { velocity: 55, lerp: 0.07, anim: 'anim-1', resetVelocity: -1, resetLerp: 0.1 }
+        this._settings = { velocity: 55, lerp: 0.07, anim: 'anim-3', resetVelocity: -1, resetLerp: 0.1 }
         this._dragX = 0;
         this._sliderPosition = 0;
 
@@ -74,11 +74,9 @@ class SliderComponent {
     }
     
     _resetPosition() {
-        console.log(this._padding);
         if (this._firstChildOffsetX <= this._padding) return;
         
         this._dragX = Lerp(this._dragX, this._settings.resetVelocity, this._settings.resetLerp);
-
     }
 
     _watchPosition() {
@@ -98,13 +96,12 @@ class SliderComponent {
 
     _slidesOutView() {
         for (let i = 0; i < this.ui.slides.length; i++) {
-            if (this.ui.slides[i].getBoundingClientRect().x > this._width + 100 || 
-            this.ui.slides[i].getBoundingClientRect().x + this.ui.slides[i].getBoundingClientRect().width + 100 < -100 ) 
+            if (this.ui.slides[i].getBoundingClientRect().x > this._width + 100 || this.ui.slides[i].getBoundingClientRect().x + this.ui.slides[i].getBoundingClientRect().width + 100 < -100 ) 
             {
-                
+                this.ui.slides[i].style.visibility = 'hidden';
             } else 
             {
-                
+                this.ui.slides[i].style.visibility = 'visible';
             }
         }
     }
