@@ -21,11 +21,26 @@ img {
 
 .slide {
     display: inline-block;
+    vertical-align: top;
 
     margin-right: 80px;
     font-size: 0px;
 
     overflow: hidden;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.slide {
+    $elements: 100;
+    @for $i from 0 to $elements {
+        &:nth-child(#{$i}) {
+            @include resizeSlide(#{$i % 3});
+        }
+    }
 }
 
 @keyframes slide {

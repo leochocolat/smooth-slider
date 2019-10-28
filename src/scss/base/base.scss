@@ -8,3 +8,59 @@ body {
 
   overflow: hidden;
 }
+
+@function modulo($n, $modulo) {
+
+  $result: $n % $modulo;
+
+  @return $result;
+}
+
+@mixin resizeSlide($number) {
+
+  $size1: 590px;
+  $size2: 450px;
+  $size3: 550px;
+
+  $mobileFactor: 0.6;
+  $tabletFactor: 0.8;
+
+  @if $number == '1' {
+      width: $size1 !important;
+      
+      // @include breakpoint(tablet) {
+      //     width: calc(#{$size1 * $tabletFactor}) !important;
+      // }
+      // @include breakpoint(mobile) {
+      //     width: calc(#{$size1 * $mobileFactor}) !important;
+      // }
+
+      // border: solid 2px red;
+  }
+  
+  @if $number == '2' {
+      width: $size2 !important;
+      
+      // @include breakpoint(tablet) {
+      //     width: calc(#{$size2 * $tabletFactor}) !important;
+      // }
+      // @include breakpoint(mobile) {
+      //     width: calc(#{$size2 * $mobileFactor}) !important;
+      // }
+
+      // border: solid 2px green;
+  }
+  
+  @if $number == '0' {
+      width: $size3 !important;
+      
+      // @include breakpoint(tablet) {
+      //     width: calc(#{$size3 * $tabletFactor}) !important;
+      // }
+      // @include breakpoint(mobile) {
+      //     width: calc(#{$size3 * $mobileFactor}) !important;
+      // }
+
+      // border: solid 2px blue;
+  }
+}

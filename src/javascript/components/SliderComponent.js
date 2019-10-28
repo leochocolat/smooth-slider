@@ -24,7 +24,7 @@ class SliderComponent {
             slideImages: this.el.querySelectorAll('.js-slide-image'),
         }
 
-        this._settings = { velocity: 40, lerp: 0.07, anim: 'anim-3', resetVelocity: -1.5, resetLerp: .2 }
+        this._settings = { velocity: 40, lerp: 0.06, anim: 'anim-3', resetVelocity: -1.5, resetLerp: .2 }
         this._dragX = 0;
         this._sliderPosition = 0;
 
@@ -72,10 +72,26 @@ class SliderComponent {
         if (this.isDragging) return;
         this._dragX = Lerp(this._dragX, 0, this._settings.lerp);
     }
-    
+
     _watchDrag() {
-        if (this._firstChildOffsetX <= this._padding) return;
-        this._dragX = Lerp(this._dragX, this._settings.resetVelocity, this._settings.resetLerp);
+        // if(this.isDragging) return;
+        // if (this._firstChildOffsetX > this._padding && !this.isReseting) {
+        //     this.isReseting = true;
+        //     TweenLite.to(this, 1, { _sliderPosition: 0, ease: Power2.easeOut, onComplete: () => {
+        //         this.isReseting = false;
+        //     } });
+        // }
+    }
+    
+    _resetSlidesToOrigin() {
+        if (this._isDragging) return;
+        if (this._firstChildOffsetX > this._padding) {
+            this.isReseting = true;
+            clearTimeout(this._setTimeout);
+            this._resetTween = TweenLite.to(this, 1, { _sliderPosition: 0, ease: Power2.easeOut, onComplete: () => {
+                this.isReseting = false;
+            } });
+        }
     }
 
     _watchPosition() {
@@ -129,11 +145,10 @@ class SliderComponent {
 
         this._updatePosition();
         this._resetDragX();
+        this._watchDrag();
         
         this._slidesOutView();
         this._isLastChildInView();
-
-        this._watchDrag();
     }
 
     _setupEventListener() {
@@ -147,7 +162,9 @@ class SliderComponent {
 
     _dragHandler(e) {
         this.isDragging = true;
-
+        if (this._resetTween) {
+            this._resetTween.kill();
+        }
         this._dragX = e.velocityX;
     }
 
@@ -181,6 +198,10 @@ class SliderComponent {
 
     _dragEndHandler() {
         this.isDragging = false;
+        this._resetSlidesToOrigin();
+        this._setTimeout = setTimeout(() => {
+            this._resetSlidesToOrigin();
+        }, 400)
     }
 
     _tickHandler() {
