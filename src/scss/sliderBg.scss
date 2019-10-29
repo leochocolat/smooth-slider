@@ -1,8 +1,3 @@
-.container {
-    max-width: 1300px;
-    margin: auto;
-}
-
 
 .slider-bg {
     width: 100%;
@@ -10,12 +5,19 @@
 
     background-position: center;
     background-size: cover;
-    // background-image: url('https://picsum.photos/id/39/1000/800');
+    background-image: url('https://picsum.photos/id/39/1000/800');
+
+    transition: background-image .5s ease-in-out;
+
+    color: white;
 }
 
 .slides-container {
     position: relative;
     top: 50%;
+    
+    max-width: 1300px;
+    margin: auto;
 }
 
 .slide {
@@ -39,4 +41,6 @@ button {
     background: none;
     border: none;
     padding: 0;
+
+    color: white;
 }

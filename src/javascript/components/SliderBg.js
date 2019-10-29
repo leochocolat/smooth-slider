@@ -9,7 +9,7 @@ const EASE = Power2.easeInOut;
 
 class SliderBg {
     constructor(el) {
-        _.bindAll(this, '_dragHandler', '_dragEndHandler', '_clickHandler');
+        _.bindAll(this, '_dragHandler', '_dragEndHandler', '_clickHandler', '_updateBackground');
 
         this.el = el;
 
@@ -27,6 +27,7 @@ class SliderBg {
     }
 
     _setup() {
+        this._loadBackgrounds();
         this._clone();
         this._createSlides();
         this._appendSlides();
@@ -34,6 +35,28 @@ class SliderBg {
         this._setupTweens();
         this._setupHammer();
         this._setupEventListeners();
+    }
+
+    _loadBackgrounds() {
+        let promises = [];
+        let img;
+        
+        for (let i = 0; i < this.ui.slides.length; i++) {
+            let url = this.ui.slides[i].dataset.background;
+            img = new Image();
+            img.src = url;
+            let promise = new Promise((resolve, reject) => {
+                img.addEventListener('load', resolve(img));
+                img.addEventListener('error', () => {
+                reject(new Error(`Failed to load image's URL: ${url}`));
+                });
+            });
+            promises.push(promise);
+        }
+
+        Promise.all(promises).then(result => {
+            this._backgrounds = result;
+        });
     }
 
     _clone() {
@@ -97,6 +120,15 @@ class SliderBg {
         slide.setItem(itemIndex, item);
     }
 
+    _updateBackground() {
+        if (this._tweenObj.index === this._tweenObj.currentSlide) return;
+
+        let currentSlide = this.ui.slides[this._mod(this._tweenObj.activeIndex, this.ui.slides.length)];
+        let background = currentSlide.dataset.background;
+        let image = this._backgrounds[this._mod(this._tweenObj.activeIndex, this.ui.slides.length)];
+        this.el.style.backgroundImage = `url(${background})`;
+    }
+
     _setupTweens() {
         const xMovement = 100;
 
@@ -130,6 +162,7 @@ class SliderBg {
                 this._timeline.progress(progress);
                 this._tweenObj.activeIndex = Math.round(this._tweenObj.index);
                 this._updateSlides();
+                this._updateBackground();
             }
         });
     }
@@ -160,7 +193,7 @@ class SliderBg {
     }
 
     _clickHandler() {
-        this.next();
+        // this.next();
     }
 
     _dragHandler(e) {
