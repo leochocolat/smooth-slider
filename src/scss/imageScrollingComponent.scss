@@ -1,0 +1,25 @@
+.js-section-image-scrolling {
+    max-width: 1300px;
+
+    margin: 100px auto;
+}
+
+.image-container {
+    width: 600px;
+
+    margin: 500px auto;
+    margin-right: 0;
+    
+    overflow: hidden;
+    
+    font-size: 0;
+
+    &:nth-child(odd) {
+        margin-left: 0;
+    }
+
+    .image {
+        width: 100%;
+        height: auto;
+    }
+}
