@@ -1,6 +1,6 @@
 import LocomotiveScroll from 'locomotive-scroll';
 import _ from 'underscore';
-import { TweenLite, TimelineLite, Power0 } from 'gsap';
+import { TimelineLite, Power0 } from 'gsap';
 
 class SmoothScrollComponent {
     constructor(container) {
@@ -40,7 +40,7 @@ class SmoothScrollComponent {
         let image = object.el.querySelector('.js-image');
         this._tweenCollection[id - 1].target = object.el;
         this._tweenCollection[id - 1].targetOffsetBottom = object.bottom;
-        this._tweenCollection[id - 1].timeline.fromTo(image, 1, { scale: 1 }, { scale: 2, ease: Power0.easeNone });
+        this._tweenCollection[id - 1].timeline.fromTo(image, 1, { scale: 1 }, { scale: 1.7, ease: Power0.easeNone });
     }
 
     _updateTweens(event) {
@@ -58,7 +58,6 @@ class SmoothScrollComponent {
     _setupEventListeners() {
         this._scroll.on('scroll', this._onScrollHandler);
         this._scroll.on('call', this._onCallHandler);
-        TweenLite.ticker.addEventListener('tick', this._tickHandler)
     }
 
     _onScrollHandler(event) {

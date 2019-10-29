@@ -1,0 +1,42 @@
+.container {
+    max-width: 1300px;
+    margin: auto;
+}
+
+
+.slider-bg {
+    width: 100%;
+    height: 100vh;
+
+    background-position: center;
+    background-size: cover;
+    // background-image: url('https://picsum.photos/id/39/1000/800');
+}
+
+.slides-container {
+    position: relative;
+    top: 50%;
+}
+
+.slide {
+    position: absolute;
+
+    width: 100%;
+}
+
+.slide__heading {
+    font-size: 20px;
+}
+
+.slide__content {
+    width: 50%;
+
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+button {
+    background: none;
+    border: none;
+    padding: 0;
+}
