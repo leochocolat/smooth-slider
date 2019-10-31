@@ -1,16 +1,39 @@
 import LocomotiveScroll from 'locomotive-scroll';
 import _ from 'underscore';
-import { TimelineLite, Power0 } from 'gsap';
+import { TimelineLite, Power0, Power1 } from 'gsap';
+import * as dat from 'dat.gui';
 
 class SmoothScrollComponent {
     constructor(container) {
-        _.bindAll(this, '_onCallHandler', '_onScrollHandler');
+        _.bindAll(this, '_onCallHandler', '_onScrollHandler', '_onSettingsChange');
 
         this.el = container;
         this.ui = {
-            animImage: container.querySelectorAll('.js-image-scrolling')
+            animImage: container.querySelectorAll('.js-image-scrolling'),
+            text: container.querySelector('.js-smooth-scroll-text')
         }
+
+        this._settings = {
+            scale: 1.8,
+            ease: 'Power2.easeIn',
+        }
+
+        let gui = new dat.GUI();
+        gui.add(this._settings, 'scale', 1, 5).step(0.01).onChange(this._onSettingsChange);
+        gui.add(this._settings, 'ease', [
+            'Power0.easeNone',
+            'Power1.easeIn',
+            'Power1.easeOut',
+            'Power1.easeInOut',
+            'Power2.easeIn',
+            'Power2.easeOut',
+            'Power2.easeInOut',
+            'Power3.easeIn',
+            'Power3.easeOut',
+            'Power3.easeInOut',
+        ]);
         
+        this._setupSplitText();
         this._setupScroll();
         this._setupTweenCollection();
         this._setupEventListeners();
@@ -23,6 +46,21 @@ class SmoothScrollComponent {
             getDirection: true,
             getSpeed: true
         });
+    }
+
+    _setupSplitText() {
+        let string = this.ui.text.innerHTML;
+        let fragment = document.createDocumentFragment();
+        for (let i = 0; i < string.length; i++) {
+            let div = document.createElement('span');
+            div.innerHTML = string.charAt(i);
+            div.style.display = 'inline-block';
+            div.setAttribute('data-scroll', '');
+            div.setAttribute('data-scroll-speed', `-${Math.random() * string.length/20}`);
+            fragment.appendChild(div);
+        }
+        this.ui.text.innerHTML = '';
+        this.ui.text.appendChild(fragment);
     }
 
     _setupTweenCollection() {
@@ -38,9 +76,9 @@ class SmoothScrollComponent {
 
     _setupTween(object, id) {
         let image = object.el.querySelector('.js-image');
-        this._tweenCollection[id - 1].target = object.el;
-        this._tweenCollection[id - 1].targetOffsetBottom = object.bottom;
-        this._tweenCollection[id - 1].timeline.fromTo(image, 1, { scale: 1 }, { scale: 1.7, ease: Power0.easeNone });
+        this._tweenCollection[id].target = object.el;
+        this._tweenCollection[id].targetOffsetBottom = object.bottom;
+        this._tweenCollection[id].timeline.fromTo(image, 1, { scale: 1 }, { scale: this._settings.scale, ease: this._settings.ease });
     }
 
     _updateTweens(event) {
@@ -66,6 +104,11 @@ class SmoothScrollComponent {
 
     _onCallHandler(e, state, object) {
         this._setupTween(object, object.id);
+    }
+
+    _onSettingsChange() {
+        this._scroll.init();
+        this._scroll.start();
     }
 
 }

@@ -10,37 +10,37 @@
     transition: background-image .5s ease-in-out;
 
     color: white;
-}
 
-.slides-container {
-    position: relative;
-    top: 50%;
+    .slides-container {
+        position: relative;
+        top: 50%;
+        
+        max-width: 1300px;
+        margin: auto;
+    }
     
-    max-width: 1300px;
-    margin: auto;
-}
-
-.slide {
-    position: absolute;
-
-    width: 100%;
-}
-
-.slide__heading {
-    font-size: 20px;
-}
-
-.slide__content {
-    width: 50%;
-
-    font-size: 15px;
-    margin-bottom: 30px;
-}
-
-button {
-    background: none;
-    border: none;
-    padding: 0;
-
-    color: white;
+    .slideBg {
+        position: absolute;
+    
+        width: 100%;
+    }
+    
+    .slideBg__heading {
+        font-size: 20px;
+    }
+    
+    .slideBg__content {
+        width: 50%;
+    
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+    
+    button {
+        background: none;
+        border: none;
+        padding: 0;
+    
+        color: white;
+    }
 }

@@ -72,16 +72,6 @@ class SliderComponent {
         if (this.isDragging) return;
         this._dragX = Lerp(this._dragX, 0, this._settings.lerp);
     }
-
-    _watchDrag() {
-        // if(this.isDragging) return;
-        // if (this._firstChildOffsetX > this._padding && !this.isReseting) {
-        //     this.isReseting = true;
-        //     TweenLite.to(this, 1, { _sliderPosition: 0, ease: Power2.easeOut, onComplete: () => {
-        //         this.isReseting = false;
-        //     } });
-        // }
-    }
     
     _resetSlidesToOrigin() {
         if (this._isDragging) return;
@@ -145,7 +135,6 @@ class SliderComponent {
 
         this._updatePosition();
         this._resetDragX();
-        this._watchDrag();
         
         this._slidesOutView();
         this._isLastChildInView();

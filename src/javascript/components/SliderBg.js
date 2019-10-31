@@ -149,7 +149,7 @@ class SliderBg {
             ease = Power1.easeOut
         }
 
-        let deltaDuration = velocity * 0.1;
+        let deltaDuration = velocity * 0.15;
         if (deltaDuration > 0.5) {
             deltaDuration = 0.5
         }
