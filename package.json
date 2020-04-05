@@ -33,7 +33,7 @@
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
-    "acorn": "^6.1.1",
+    "acorn": "^6.4.1",
     "acorn-dynamic-import": "^4.0.0",
     "browser-sync": "^2.26.7",
     "dat.gui": "^0.7.6",
